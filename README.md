@@ -1,10 +1,22 @@
-# MINI-GAME-BASED-ON-HAND-COLOR
-Mini game with computer vision
 # Wizbang
 
 Game sederhana yang dikontrol pakai sarung tangan ungu lewat webcam. Pemain jadi penyihir yang menembak musuh yang turun dari atas layar. Deteksi tangan memakai threshold warna HSV dan analisis kontur dengan OpenCV, tanpa MediaPipe.
 
 Dibuat untuk tugas mata kuliah PCV.
+
+## Screenshot
+
+Menembak:
+
+![Menembak](screenshots/nembak.png)
+
+Pause (sarung tangan tidak terdeteksi):
+
+![Paused](screenshots/paused.png)
+
+Game over:
+
+![Game over](screenshots/gameover.png)
 
 ## Dependencies
 
