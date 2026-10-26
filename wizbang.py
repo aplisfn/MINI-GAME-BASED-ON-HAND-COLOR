@@ -5,17 +5,6 @@ import cv2
 import numpy as np
 import pygame
 
-# KONTROL
-#   Geser sarung tangan   -> gerakin wizard
-#   Tangan mengepal             -> mulai ngecas spell
-#   Buka kepalan tangan           -> lepas spell (cas > 0.6 detik = MEGA BLAST tembus musuh)
-#   O = kalibrasi tangan terbuka | F = kalibrasi kepalan (tekan saat gesturenya ditahan)
-#   Keyboard cadangan: panah kiri/kanan + SPACE 
-#   R restart | Q / ESC keluar
-#
-# Semua aset digambar lewat kode (supersampling 4x lalu di-smoothscale)
-# jadi tidak butuh file gambar.
-
 CAMERA_INDEX = 0
 LOWER_PURPLE = np.array([120, 40, 30], dtype=np.uint8)
 UPPER_PURPLE = np.array([165, 255, 255], dtype=np.uint8)
@@ -24,10 +13,10 @@ WIDTH, HEIGHT = 1000, 700
 FPS = 60
 START_LIVES = 3
 PLAYER_Y = HEIGHT - 120
-GY = PLAYER_Y + 50          # garis tanah
+GY = PLAYER_Y + 50          
 MEGA_TIME = 0.6
 MAX_CHARGE = 1.0
-AUTO_PAUSE = True      # pause otomatis kalau sarung tangan hilang dari kamera
+AUTO_PAUSE = True      
 PAUSE_DELAY = 0.4     
 
 FIST_SOL, OPEN_SOL = 0.90, 0.74
@@ -82,8 +71,6 @@ def lerp_col(c1, c2, t):
 def clamp01(v):
     return max(0.0, min(1.0, v))
 
-
-#  supersampled sprite drawing
 def sprite(w, h, fn, ss=4):
     big = pygame.Surface((w * ss, h * ss), pygame.SRCALPHA)
     fn(big, ss)
@@ -112,7 +99,7 @@ def flashed(spr):
     return f
 
 
-# sprites
+# karakter 
 def wizard_frame(sway):
     def d(s, S):
         robe, robe_l, robe_d = (70, 42, 150), (100, 66, 192), (52, 30, 118)
@@ -121,7 +108,7 @@ def wizard_frame(sway):
         poly(s, S, robe_l, [(30 + sway, 150), (42, 82), (64, 82), (60, 150)])
         poly(s, S, robe_d, [(100 + sway, 150), (88, 82), (72, 82), (78, 150)])
         line(s, S, GOLD, (30 + sway, 147), (100 + sway, 147), 4)
-        for i in range(7):  # hiasan di hem
+        for i in range(7):  
             px = 36 + sway + i * 10
             poly(s, S, (255, 225, 140), [(px, 147), (px + 3, 141), (px + 6, 147)])
         # sabuk
@@ -175,10 +162,10 @@ def ghost_frame(f):
         poly(s, S, (170, 195, 240), [(13, 40), (71, 40), (71, 80), (13, 80)])
         circ(s, S, body, (42, 40), 26)
         poly(s, S, body, [(16, 40), (68, 40), (68, 80), (16, 80)])
-        for i, cx in enumerate((22, 36, 50, 64)):        # rok bergelombang
+        for i, cx in enumerate((22, 36, 50, 64)):        
             cy = 80 + (o if i % 2 else -o)
             circ(s, S, body, (cx, cy), 7.5)
-        ell(s, S, (234, 244, 255), 28, 28, 26, 38)       # perut terang
+        ell(s, S, (234, 244, 255), 28, 28, 26, 38)       
         # lengan
         circ(s, S, body, (13, 56 + o), 6)
         circ(s, S, body, (71, 56 - o), 6)
@@ -241,7 +228,7 @@ def pumpkin_frame(f):
         for x in (24, 45, 66):                            
             pygame.draw.arc(s, (150, 62, 14), (int((x - 12) * S), int(16 * S), int(24 * S), int(66 * S)),
                             math.pi * .55, math.pi * 1.45, int(1.5 * S))
-        # wajah menyala
+
         face = (255, 232, 100)
         poly(s, S, face, [(23, 40), (35, 40), (29, 29)])
         poly(s, S, face, [(55, 40), (67, 40), (61, 29)])
@@ -376,7 +363,7 @@ def make_background():
     # nebula
     for x, y, r, c in [(200, 190, 300, (46, 16, 86)), (600, 330, 340, (14, 38, 90)), (880, 380, 240, (70, 20, 80))]:
         add_glow(bg, x, y, r, c)
-    # gunung berlapis
+    # gunung 
     draw_ridge(bg, GY - 205, 95, 11, (44, 26, 86))
     cxc = 170
     draw_castle(bg, cxc, int(ridge_y(GY - 205, 95, 11, cxc)) + 10)
@@ -419,8 +406,6 @@ def build_assets():
                for _ in range(26)]
     return A
 
-
-#  gesture
 class Gesture:
     """Deteksi ngepal vs buka dari bentuk kontur (solidity + luas)."""
     def __init__(self):
@@ -466,7 +451,6 @@ class Gesture:
             self.fist_sol, self.fist_area = self.sol, self.area
 
 
-#  game state
 ENEMY_SPEC = {"ghost": dict(r=28, hp=1, score=1), "bat": dict(r=26, hp=1, score=1),
               "pumpkin": dict(r=32, hp=2, score=2)}
 ENEMY_COLORS = {"ghost": (150, 190, 255), "bat": (255, 80, 130), "pumpkin": (255, 150, 40)}
@@ -486,7 +470,7 @@ def burst(particles, x, y, color, n=14, speed=(60, 220)):
                           random.uniform(.25, .65), color, random.randint(2, 5)])
 
 
-ORB_DX, ORB_DY = 35, -72   # posisi orb relatif terhadap (x, PLAYER_Y)
+ORB_DX, ORB_DY = 35, -72   
 
 
 def start_charge(g, src):
@@ -530,7 +514,7 @@ def draw_scene(world, A, g, t, dt):
         br = int(90 + 150 * (.5 + .5 * math.sin(t * 2 + ph)))
         pygame.draw.circle(world, (br, br, min(255, br + 30)), (sx, sy), sz)
 
-    # awan melayang
+    
     for c in A.clouds:
         c[1] += c[3] * dt
         if c[1] > WIDTH + 20:
@@ -549,7 +533,6 @@ def draw_scene(world, A, g, t, dt):
         add_glow(world, f[0], f[1], 11, tuple(int(c * k * .8) for c in f[5]))
         pygame.draw.circle(world, tuple(int(c * k) for c in f[5]), (int(f[0]), int(f[1])), 2)
 
-    # lingkaran di bawah wizard
     charge = g["charge"]
     cval = 0 if charge is None else min(1.0, charge / MAX_CHARGE)
     lvl = int(round(cval * 4)) if charge is not None else 1
@@ -606,7 +589,7 @@ def draw_scene(world, A, g, t, dt):
             pygame.draw.circle(world, col, (int(ox + math.cos(a) * (orb_r + 13)),
                                             int(oy + math.sin(a) * (orb_r + 13))), 3)
 
-    # partikel
+  
     for p in g["particles"]:
         radius = max(1, int(p[6] * min(1, p[4] / .5)))
         add_glow(world, p[0], p[1], radius * 3, tuple(int(v * .5) for v in p[5]))
@@ -753,7 +736,7 @@ def main():
                 cam_surf = pygame.image.frombuffer(rgb.tobytes(), (180, 135), "RGB")
                 cam_surf.set_alpha(225)
 
-            # auto pause / resume
+           
             if glove_found:
                 glove_ever = True
             paused = (AUTO_PAUSE and glove_ever and not glove_found
@@ -762,7 +745,7 @@ def main():
                 dt = 0.0
             t += dt
 
-            #  events
+            
             for ev in pygame.event.get():
                 if ev.type == pygame.QUIT:
                     running = False

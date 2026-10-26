@@ -1,14 +1,26 @@
-# MINI-GAME-BASED-ON-HAND-COLOR
-Mini game with computer vision
 # Wizbang
 
-Game sederhana yang dikontrol pakai sarung tangan ungu lewat webcam. Pemain jadi penyihir yang menembak musuh yang turun dari atas layar. Deteksi tangan memakai threshold warna HSV dan analisis kontur dengan OpenCV, tanpa MediaPipe.
+Game sederhana yang dikontrol menggunakan sarung tangan ungu lewat webcam. Pemain jadi penyihir yang menembak musuh yang turun dari atas layar. Deteksi tangan memakai threshold warna HSV dan analisis kontur dengan OpenCV.
 
 Dibuat untuk tugas mata kuliah PCV.
 
+## Screenshot
+
+Menembak:
+
+![Menembak](screenshots/nembak.png)
+
+Pause (sarung tangan tidak terdeteksi):
+
+![Paused](screenshots/paused.png)
+
+Game over:
+
+![Game over](screenshots/gameover.png)
+
 ## Dependencies
 
-- Python 3.9 atau lebih baru
+- Python 
 - Webcam
 - Sarung tangan berwarna ungu
 
@@ -75,23 +87,10 @@ Keyboard:
 5. Centroid kontur (`cv2.moments`) menentukan posisi penyihir
 6. Solidity dan luas kontur menentukan tangan sedang terbuka atau mengepal. Tangan terbuka punya celah antar jari sehingga solidity-nya lebih rendah dibanding kepalan. Ada hysteresis supaya status tidak berganti-ganti terus.
 
-## Pengaturan
-
-Konstanta di bagian atas `wizbang.py`:
-
-- `CAMERA_INDEX`: indeks webcam, coba `1` kalau kamera tidak terbuka
-- `LOWER_PURPLE`, `UPPER_PURPLE`: range HSV sarung tangan (default `[120, 40, 30]` sampai `[165, 255, 255]`)
-- `MIN_AREA`: luas kontur minimum
-- `MEGA_TIME`: lama cas untuk mega blast
-- `START_LIVES`: jumlah nyawa awal
-- `AUTO_PAUSE`, `PAUSE_DELAY`: pengaturan pause otomatis
-
-Kecepatan dan frekuensi musuh diatur di fungsi `spawn_enemy` dan variabel `interval` di loop utama.
-
 ## Masalah umum
 
-- Webcam tidak terbuka: tutup aplikasi lain yang memakai kamera, atau ganti `CAMERA_INDEX`.
-- Sarung tangan tidak terdeteksi: lihat jendela HSV Mask dan sesuaikan range HSV. Pastikan cahaya cukup dan tidak ada benda ungu atau biru tua di belakang.
+- Webcam tidak terbuka: tutup aplikasi lain yang memakai kamera, atau ganti `CAMERA_INDEX` di bagian atas `wizbang.py` (coba `1`).
+- Sarung tangan tidak terdeteksi: lihat jendela HSV Mask dan sesuaikan `LOWER_PURPLE` dan `UPPER_PURPLE` di `wizbang.py`. Pastikan cahaya cukup dan tidak ada benda ungu atau biru tua di belakang.
 - Ngepal dan buka tidak terbaca benar: kalibrasi ulang dengan `O` dan `F`. Nilai `open=` di preview webcam mendekati 1 saat tangan terbuka dan mendekati 0 saat mengepal.
 - Error saat instal atau import pygame: jalankan `pip uninstall pygame`, lalu `pip install pygame-ce`.
 
