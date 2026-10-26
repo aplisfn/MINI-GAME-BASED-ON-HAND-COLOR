@@ -36,7 +36,6 @@ Instal:
 python -m pip install opencv-python numpy pygame-ce
 ```
 
-Pakai `pygame-ce`, bukan `pygame`. Keduanya memakai nama modul yang sama, jadi jangan dipasang berbarengan.
 
 ## Menjalankan
 
@@ -53,7 +52,7 @@ Dengan sarung tangan:
 - Geser tangan kiri/kanan: gerakkan penyihir
 - Ngepal: isi tenaga spell
 - Buka tangan: tembakkan spell
-- Ngepal lebih dari 0,6 detik lalu buka: mega blast, menembus semua musuh
+- Ngepal lebih dari 0,6 detik lalu buka: mega blast
 - Sarung tangan tidak terlihat kamera: game pause otomatis, lanjut sendiri saat terdeteksi lagi
 
 Keyboard:
