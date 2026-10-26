@@ -6,7 +6,7 @@ Dibuat untuk tugas mata kuliah PCV.
 
 ## Screenshot
 
-Menembak:
+Gameplay:
 
 ![Menembak](screenshots/nembak.png)
 
